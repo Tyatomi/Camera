@@ -15,17 +15,37 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight, 
     flex: 1,
   },
+  image : {
+    width:80,
+    height:300,
+    marginLeft: 250,
+    marginTop: 240,    
+  }
 });
 
 export default class CameraExample extends React.Component {
   state = {
     hasCameraPermission: null,
+    hasCameraRollPermission: null,
     type: Camera.Constants.Type.back,
+    
   };
 
   async componentWillMount() {
+    this.setCameraStatus();
+    this.setCameraRollStatus();
+  }
+
+  //カメラのpermissionのstatus取得
+  async setCameraStatus(){
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
+  }
+
+  //カメラロールのpermissionのstatus取得
+  async setCameraRollStatus(){
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    this.setState({ hasCameraRollPermission: status === 'granted' });
   }
 
   //画像保存メソッド
@@ -63,6 +83,7 @@ export default class CameraExample extends React.Component {
                 backgroundColor: 'transparent',
                 flexDirection: 'row',
               }}>
+              
               <TouchableOpacity
                 style={{
                   flex: 0.1,
@@ -78,9 +99,10 @@ export default class CameraExample extends React.Component {
                 }}>
                 <Text
                   style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                  {' '}Flip{' '}
+                  {' '}{' '}
                 </Text>
               </TouchableOpacity>
+              <Image source={require('./img/sample01.png')} style={styles.image}/>
             </View>
           </Camera>
           <Button onPress={this.snap}title="press" />
